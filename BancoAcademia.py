@@ -1,4 +1,4 @@
-#banco de dados
+#banco de dados de academia
 import sqlite3
 	
 class BancoAcademia(object):
