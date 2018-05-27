@@ -1,4 +1,7 @@
 #modulo de Model_Secretario
+import sys
+sys.path.append("../model")
+
 class Model_Secretario(object):
 	
 	__login = None
@@ -11,10 +14,7 @@ class Model_Secretario(object):
 	__MAX_SENHA = None
 	
 	def __init__(self):
-		self.set_max_login(30)
-		self.set_max_senha(30)
-		self.set_min_login(4)
-		self.set_min_senha(4)
+		self.inicialicao_padrao()
 		
 	#get's
 	def get_login(self):
@@ -45,23 +45,15 @@ class Model_Secretario(object):
 		self.Model_Secretario__MIN_SENHA = min
 		
 	#metodos de validacao
-	def valida_tamanho_login(self):
-		len_login = len(self.get_login())
-		if  (len_login < self.get_min_login()) or (len_login > self.get_max_login()):
-			return False
-		return True
-	def valida_tamanho_senha(self):
-		len_senha = len(self.get_senha())
-		if  len_senha < self.get_min_senha() or len_senha > self.get_max_senha():
-			return False
-		return True
-	def possui_caractere_especial(self):
-		especiais = "?/\\'\",.;:ºç¹²³¢><~^{}=+-_*&¨%$#@![]´`§£¬()"
-		login = self.get_login()
-		for caractere in especiais:
-			if login.count(caractere) == 1:
-				return True
-		return False
-		
+	def inicialicao_padrao(self):
+		self.set_max_login(30)
+		self.set_max_senha(30)
+		self.set_min_login(4)
+		self.set_min_senha(4)
+		self.set_login(None)
+		self.set_senha(None)
+	
 if __name__== '__main__':
-	pass
+	M = Model_Secretario()
+	M.set_senha("um boi")
+	print(M.senha_tem_espaco())

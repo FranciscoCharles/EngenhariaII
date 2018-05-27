@@ -1,11 +1,10 @@
-#modulo de Model_Banco_Secretario
+#modulo de Model_Banco_Torneio
 import sqlite3
 import sys
 sys.path.append("../")
+from model.Model_Torneio import*
 
-from model.Model_Secretario import*
-
-class Model_Banco_Secretario(Model_Secretario):
+class Model_Banco_Torneio(Model_Torneio):
 	
 	__caminho_banco = None
 	
@@ -14,10 +13,10 @@ class Model_Banco_Secretario(Model_Secretario):
 		self.set_caminho("C:\\Users\\Charles\\Desktop\\aulas\\Engenharia\\MVC_judo\\banco\\banco_dados.db")
 	#get's'
 	def get_caminho(self):
-		return self.Model_Banco_Secretario__caminho_banco
+		return self.Model_Banco_Torneio__caminho_banco
 	#set's
 	def set_caminho(self, caminho):
-		self.Model_Banco_Secretario__caminho_banco = caminho
+		self.Model_Banco_Torneio__caminho_banco = caminho
 	#metodos de gerenciamento de banco
 	def criar_tabela(self):
 		# criando a tabela (schema)
@@ -25,10 +24,15 @@ class Model_Banco_Secretario(Model_Secretario):
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
-				CREATE TABLE IF NOT EXISTS secretario (
-					login TEXT NOT NULL,
-					senha TEXT NOT NULL
-			);
+				CREATE TABLE IF NOT EXISTS torneio (
+					id INT NOT NULL AUTO_INCREMENT,
+					nome VARCHAR(100) NOT NULL,
+					data VARCHAR(10) NOT NULL,
+					local VARCHAR(10) NOT NULL,
+					contato VARCHAR(12) NOT NULL,
+					organizador VARCHAR(10) NOT NULL,
+					PRIMARY KEY(nome),
+					FOREIGN KEY (nome) REFERENCES integrantes_torneio(nome_torneio)
 			""")
 			self.conecao.close()
 			if resultado is not None:
@@ -36,12 +40,12 @@ class Model_Banco_Secretario(Model_Secretario):
 		except sqlite3.Error :
 			pass
 		return False
-	def salvar_secretario(self):
+	def salvar_torneio(self):
 		try:
-			if not self.este_secretario_existe():
+			if not self.este_torneio_existe():
 				self.conecao = sqlite3.connect(self.get_caminho())
 				self.cursor = self.conecao.cursor()
-				resultado = self.cursor.execute("INSERT INTO secretario (login,senha) VALUES (?,?)",(self.get_login(),self.get_senha(),))
+				resultado = self.cursor.execute("INSERT INTO torneio (nome,data,local,contato,organizador) VALUES (?,?,?,?)",(self.get_nome(),self.get_data(),self.get_local(),self.get_contato(),self.get_organizador(),))
 				self.conecao.commit()
 				self.conecao.close()
 				if resultado is not None:
@@ -49,26 +53,26 @@ class Model_Banco_Secretario(Model_Secretario):
 		except sqlite3.Error :
 			pass
 		return False
-	def listar_secretario(self):
+	def listar_torneio(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			self.cursor.execute("SELECT * FROM secretario;")
+			self.cursor.execute("SELECT * FROM torneio;")
 			texto = self.cursor.fetchall()
-			saida = ""
 			for linha in texto:
+				#texto+= str(linha[0])+"\n"
 				print(linha)
 			self.conecao.close()
-			return saida
+			return texto
 		except sqlite3.Error :
 			pass
-	def remover_secretario(self):	
+	def remover_torneio(self):	
 		try:
 			if self.este_secretario_existe():
 				self.conecao = sqlite3.connect(self.get_caminho())
 				self.cursor = self.conecao.cursor()
 				# excluindo um registro da tabela
-				saida = self.cursor.execute("DELETE FROM secretario WHERE (login=?)", (self.get_login(),))
+				saida = self.cursor.execute("DELETE FROM torneio WHERE (nome=?)", (self.get_nome(),))
 				self.conecao.commit()
 				self.conecao.close()
 				if saida is not None:
@@ -76,33 +80,21 @@ class Model_Banco_Secretario(Model_Secretario):
 		except sqlite3.Error :
 			pass
 		return False
-	def buscar_secretario(self):
+	def buscar_torneio(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			saida = self.cursor.execute("SELECT * FROM secretario WHERE (login=?)",(self.get_login(),))
+			saida = self.cursor.execute("SELECT * FROM torneio WHERE (nome=?)",(self.get_nome(),))
 			saida = self.cursor.fetchone()
 			self.conecao.close();
 			return saida
 		except sqlite3.Error :
 			pass
-	def validar_secretario(self):
+	def este_torneio_existe(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			saida = self.cursor.execute("SELECT * FROM secretario WHERE (login=?)AND(senha=?)",(self.get_login(),self.get_senha(),))
-			saida = saida.fetchone()
-			self.conecao.close();
-			if saida is not None:
-				return True
-		except sqlite3.Error :
-			pass
-		return False
-	def este_secretario_existe(self):
-		try:
-			self.conecao = sqlite3.connect(self.get_caminho())
-			self.cursor = self.conecao.cursor()
-			saida = self.cursor.execute("SELECT * FROM secretario WHERE (login=?)",(self.get_login(),))
+			saida = self.cursor.execute("SELECT * FROM torneio WHERE (nome=?)",(self.get_nome(),))
 			saida = saida.fetchone()
 			self.conecao.close();
 			if saida is not None:
@@ -111,9 +103,4 @@ class Model_Banco_Secretario(Model_Secretario):
 			pass
 		return False
 if __name__== '__main__':
-
-	S = Model_Banco_Secretario()
-	S.criar_tabela()
-	S.salvar_secretario()
-	print(S.validar_secretario())
-	print(S.listar_secretario())
+	A = Model_Banco_Torneio()

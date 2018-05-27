@@ -5,10 +5,19 @@ class Model_Torneio(object):
 	__local = None
 	__data = None
 	__valor = None
+	__contato = None
 	__organizador = None
 	
 	def __init__(self):
-		pass
+		self.inicializacao_padrao()
+		
+	def inicializacao_padrao(self):
+		self.set_nome(None)
+		self.set_data(None)
+		self.set_local(None)
+		self.set_valor(None)
+		self.set_contato(None)
+		self.set_organizador(None)
 	#get's
 	def get_nome(self):
 		return self.Model_Torneio__nome
@@ -18,6 +27,8 @@ class Model_Torneio(object):
 		return self.Model_Torneio__data
 	def get_valor(self):
 		return self.Model_Torneio__valor
+	def get_contato(self):
+		return self.Model_Torneio__contato
 	def get_organizador(self):
 		return self.Model_Torneio__organizador
 	#set's
@@ -29,6 +40,8 @@ class Model_Torneio(object):
 		self.Model_Torneio__data = data
 	def set_valor(self, valor):
 		self.Model_Torneio__valor = valor
+	def set_contato(self, contato):
+		self.Model_Torneio__contato = contato
 	def set_organizador(self, organizador):
 		self.Model_Torneio__organizador = organizador
 
