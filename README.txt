@@ -10,6 +10,8 @@ disciplina:
 	Engenharia de software II
 autor:
 	Francisco Charles
+colaborador:
+	Jose Mayke
 linguaguem :
 	python 3.6
 versao atual :
