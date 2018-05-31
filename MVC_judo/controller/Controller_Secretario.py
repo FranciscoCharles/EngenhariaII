@@ -33,7 +33,7 @@ class Controller_Secretario(Model_Banco_Secretario):
 	def login_tem_caractere_especial(self):
 		if self.login_vazio():
 			return False
-		especiais = ".,<>;:?/\\!'\"¹²³£¢¬#$%%¨&´`§*()ç_~^+-=[]{}ªº°|@"
+		especiais = " .,<>;:?/\\!'\"¹²³£¢¬#$%%¨&´`§*()ç_~^+-=[]{}ªº°|@"
 		login = self.get_login()
 		for caractere in especiais:
 			if login.count(caractere) > 0:
@@ -72,10 +72,10 @@ class Controller_Secretario(Model_Banco_Secretario):
 		
 if __name__== '__main__':
 	C = Controller_Secretario()
-	C.set_login("novo")
-	C.set_senha("3333")
-	print(C.salvar_secretario())
+	C.set_login("big big")
+	C.set_senha("1234")
+	print(C.remover_secretario())
 	#print(C.buscar_secretario())
 	#print(C.login_tem_caractere_especial())
-	C.listar_secretario()
+	#C.listar_secretario()
 		

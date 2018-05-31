@@ -1,8 +1,7 @@
 #modulo de Controller_Torneio
 import sys
 import sqlite3
-sys.path.insert(0,'../')
-
+sys.path.append('../')
 from model.Model_Banco_Torneio import*
 
 class Controller_Torneio(Model_Banco_Torneio):
@@ -10,7 +9,37 @@ class Controller_Torneio(Model_Banco_Torneio):
 	def __init__(self):
 		super().__init__()
 		self.criar_tabela()
+		
 	#metodos de validacao
+	def hora_valida(self, hora):
+		if hora<0 or hora>24:
+			return False
+		return True
+	def minutos_valido(self, minutos):
+		if minutos<0 or minutos>59:
+			return False
+		return True
+	def separa_horario(self):
+		if (not self.horario_vazio()) and (not self.horario_possui_caractere_invalido()):
+			if self.get_horario().find(":") == 2:
+				horario = self.get_horario().split(":")
+				hora = int(horario[0])
+				minutos = int(horario[1])
+				if self.hora_valida(hora) and self.minutos_valido(minutos):
+					return True
+		return False
+	def horario_possui_caractere_invalido(self):
+		invalidos = "\\|,.;?/°]º}[ª{+=§_-)(*!¹²³£¢¬@#%$¨&'\""
+		for caractere in invalidos:
+			if self.get_horario().count(caractere)!=0:
+				return True
+		return False
+	def horario_esta_no_padrao(self):
+		if (not self.horario_vazio()) and (not self.horario_possui_caractere_invalido()):
+			if self.get_horario().count(":") == 1:
+				if len(self.get_horario()) == 5:
+					return self.separa_horario()
+		return False
 	def valida_valor(self):
 		if not self.valor_vazio():
 			if self.get_valor().count(",")==1:
@@ -71,6 +100,10 @@ class Controller_Torneio(Model_Banco_Torneio):
 		if (self.get_nome() is None) or (len(self.get_nome()) == 0):
 			return True
 		return False
+	def horario_vazio(self):
+		if (self.get_horario() is None) or (len(self.get_horario()) == 0):
+			return True
+		return False
 	def data_vazia(self):
 		if (self.get_data() is None) or (len(self.get_data()) == 0):
 			return True
@@ -92,16 +125,17 @@ class Controller_Torneio(Model_Banco_Torneio):
 			return True
 		return False
 	def contato_valido(self):
-		if (self.contato_vazio()) or (len(self.get_contato()) < 9 ) or (len(self.get_contato()) > 12 ):
+		if (self.contato_vazio()) or (len(self.get_contato()) < 9 ) or (len(self.get_contato()) > 13 ):
 			return False
 		return True
 	def dados_validos(self):
 		if self.data_valida():
-			if contato_valido():
+			if self.contato_valido():
 				if not self.organizador_vazio():
 					if not self.local_vazio():
 						if not self.nome_vazio():
-							return True
+							if self.horario_esta_no_padrao():
+								return True
 		return False
 	def salvar_torneio(self):
 		if self.dados_validos():
@@ -113,6 +147,14 @@ class Controller_Torneio(Model_Banco_Torneio):
 		return False
 		
 if __name__== '__main__':
-	C = Controller_Torneio()
-	C.criar_tabela()
-	
+	T = Controller_Torneio()
+	print(T.criar_tabela())
+	T.set_data("13/12/2019")
+	T.set_horario("02:45")
+	T.set_nome("Teste")
+	T.set_valor("3,44")
+	T.set_local("Picos")
+	T.set_organizador("pipoca")
+	T.set_contato("(089)10101101")
+	print(T.salvar_torneio())
+	T.listar_torneio()

@@ -1,11 +1,11 @@
-#modulo de Controller_Participante
+#modulo de Controller_Participante_Torneio
 import sys
 import sqlite3
 sys.path.append('../')
 
-from model.Model_Banco_Participante import*
+from model.Model_Banco_Participante_Torneio import*
 
-class Controller_Participante(Model_Banco_Participante):
+class Controller_Participante_Torneio(Model_Banco_Participante_Torneio):
 	
 	def __init__(self):
 		super().__init__()
@@ -85,6 +85,18 @@ class Controller_Participante(Model_Banco_Participante):
 		if (self.get_endereco() is None) or (len(self.get_endereco()) == 0):
 			return True
 		return False
+	def torneio_vazio(self):
+		if (self.get_torneio() is None) or (len(self.get_torneio()) == 0):
+			return True
+		return False
+	def pago_vazio(self):
+		if (self.get_pago() is None) or (len(self.get_pago()) == 0):
+			return True
+		return False
+	def pago_valido(self):
+		if (self.get_pago().upper() == "FALSE") or (self.get_pago().upper() == "TRUE"):
+			return True
+		return False
 	def telefone_valido(self):
 		if (self.telefone_vazio()) or (len(self.get_telefone()) < 9 ) or (len(self.get_telefone()) > 13 ) or ((self.get_telefone().count("(")>1) and (self.get_telefone().count(")")>1)):
 			return False
@@ -100,7 +112,9 @@ class Controller_Participante(Model_Banco_Participante):
 							if not self.endereco_vazio():
 								if not self.cpf_vazio():
 									if not self.nome_vazio():
-										return True
+										if not self.torneio_vazio():
+											if not self.pago_vazio():
+												return True
 		return False
 	def salvar_participante(self):
 		if self.dados_validos():
@@ -112,7 +126,7 @@ class Controller_Participante(Model_Banco_Participante):
 		return False
 		
 if __name__== '__main__':
-	P = Controller_Participante()
+	P = Controller_Participante_Torneio()
 	P.criar_tabela()
 	P.listar_participante()
 	
