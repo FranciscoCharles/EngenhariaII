@@ -25,6 +25,7 @@ class Model_Banco_Academia(Model_Academia):
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS academia (
+					id INT AUTO_INCREMENT DEFAULT 1,
 					nome VARCHAR(100) NOT NULL,
 					data VARCHAR(10) NOT NULL,
 					local VARCHAR(10) NOT NULL,
@@ -60,11 +61,11 @@ class Model_Banco_Academia(Model_Academia):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM academia;")
 			texto = self.cursor.fetchall()
+			saida = ""
 			for linha in texto:
-				#texto+= str(linha[0])+"\n"
-				print(linha)
+				saida += str(linha[1])+"\n"
 			self.conecao.close()
-			return texto
+			return saida
 		except sqlite3.Error :
 			pass
 	def remover_academia(self):	
@@ -81,11 +82,21 @@ class Model_Banco_Academia(Model_Academia):
 		except sqlite3.Error :
 			pass
 		return False
-	def buscar_academia(self):
+	def buscar_academia_nome(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
 			saida = self.cursor.execute("SELECT * FROM academia WHERE (nome=?)",(self.get_nome(),))
+			saida = self.cursor.fetchone()
+			self.conecao.close();
+			return saida
+		except sqlite3.Error :
+			pass
+	def buscar_academia_id(self):
+		try:
+			self.conecao = sqlite3.connect(self.get_caminho())
+			self.cursor = self.conecao.cursor()
+			saida = self.cursor.execute("SELECT * FROM academia WHERE (id=?)",(self.get_id(),))
 			saida = self.cursor.fetchone()
 			self.conecao.close();
 			return saida
@@ -115,4 +126,4 @@ if __name__== '__main__':
 	A.set_responsavel("Manoel")
 	print(A.salvar_academia())
 	#print(A.remover_academia())
-	print(A.buscar_academia())
+	print(A.buscar_academia_nome())

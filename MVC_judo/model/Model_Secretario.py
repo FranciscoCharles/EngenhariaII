@@ -55,5 +55,3 @@ class Model_Secretario(object):
 	
 if __name__== '__main__':
 	M = Model_Secretario()
-	M.set_senha("um boi")
-	print(M.senha_tem_espaco())

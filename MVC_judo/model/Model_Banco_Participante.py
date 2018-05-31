@@ -14,10 +14,10 @@ class Model_Banco_Participante(Model_Participante):
 		self.set_caminho("C:\\Users\\Charles\\Desktop\\aulas\\Engenharia\\MVC_judo\\banco\\banco_dados.db")
 	#get's'
 	def get_caminho(self):
-		return self.Model_Banco_Academia__caminho_banco
+		return self.Model_Banco_Participante__caminho_banco
 	#set's
 	def set_caminho(self, caminho):
-		self.Model_Banco_Academia__caminho_banco = caminho
+		self.Model_Banco_Participante__caminho_banco = caminho
 	#metodos de gerenciamento de banco
 	def criar_tabela(self):
 		# criando a tabela (schema)
@@ -26,6 +26,7 @@ class Model_Banco_Participante(Model_Participante):
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS participante (
+					inscricao INT AUTO_INCREMENT DEFAULT 1,
 					nome VARCHAR(100) NOT NULL,
 					academia VARCHAR(120) NOT NULL,
 					nascimento VARCHAR(10) NOT NULL,
@@ -43,6 +44,8 @@ class Model_Banco_Participante(Model_Participante):
 		except sqlite3.Error :
 			pass
 		return False
+	def conta_participantes(self):
+		pass
 	def salvar_participante(self):
 		try:
 			if not self.esta_participante_existe():
@@ -64,8 +67,7 @@ class Model_Banco_Participante(Model_Participante):
 			texto = self.cursor.fetchall()
 			saida = ""
 			for linha in texto:
-				#texto+= str(linha[0])+"\n"
-				print(linha)
+				saida += str(linha[1])+"\n"
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :
@@ -84,11 +86,31 @@ class Model_Banco_Participante(Model_Participante):
 		except sqlite3.Error :
 			pass
 		return False
-	def buscar_participante(self):
+	def buscar_participante_por_id(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			saida = self.cursor.execute("SELECT * FROM participante WHERE (nome=?)(nome=?) AND (academia=?)", (self.get_nome(),self.get_academia(),))
+			saida = self.cursor.execute("SELECT * FROM participante WHERE (id=?)", (self.get_id(),))
+			saida = self.cursor.fetchone()
+			self.conecao.close();
+			return saida
+		except sqlite3.Error :
+			pass
+	def buscar_participante_por_cpf(self):
+		try:
+			self.conecao = sqlite3.connect(self.get_caminho())
+			self.cursor = self.conecao.cursor()
+			saida = self.cursor.execute("SELECT * FROM participante WHERE (cpf=?)", (self.get_cpf(),))
+			saida = self.cursor.fetchone()
+			self.conecao.close();
+			return saida
+		except sqlite3.Error :
+			pass
+	def buscar_participante_por_nome_e_academia(self):
+		try:
+			self.conecao = sqlite3.connect(self.get_caminho())
+			self.cursor = self.conecao.cursor()
+			saida = self.cursor.execute("SELECT * FROM participante WHERE (nome=?) AND (academia=?)", (self.get_nome(),self.get_academia(),))
 			saida = self.cursor.fetchone()
 			self.conecao.close();
 			return saida
@@ -106,10 +128,10 @@ class Model_Banco_Participante(Model_Participante):
 		except sqlite3.Error :
 			pass
 		return False
+		
 if __name__== '__main__':
 	P = Model_Banco_Participante()
-	P.criar_tabela()
-	
+	print(P.criar_tabela())
 	P.set_nome("sei la")
 	P.set_academia("Cobra")
 	P.set_nascimento("13/10/2019")
@@ -121,4 +143,5 @@ if __name__== '__main__':
 	
 	print(P.esta_participante_existe())
 	print(P.salvar_participante())
+	
 	P.listar_participante()

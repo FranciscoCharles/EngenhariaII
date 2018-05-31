@@ -4,6 +4,7 @@ sys.path.append("../model")
 
 class Model_Academia(object):
 	
+	__id = None
 	__nome = None
 	__local = None
 	__data = None
@@ -20,7 +21,10 @@ class Model_Academia(object):
 		self.set_contato(None)
 		self.set_email(None)
 		self.set_responsavel(None)
+		self.set_id(None)
 	#get's
+	def get_id(self):
+		return self.Model_Academia__id
 	def get_nome(self):
 		return self.Model_Academia__nome
 	def get_contato(self):
@@ -34,6 +38,8 @@ class Model_Academia(object):
 	def get_responsavel(self):
 		return self.Model_Academia__responsavel
 	#set's
+	def set_id(self, id):
+		self.Model_Academia__id = id
 	def set_nome(self, nome):
 		self.Model_Academia__nome = nome
 	def set_contato(self, contato):

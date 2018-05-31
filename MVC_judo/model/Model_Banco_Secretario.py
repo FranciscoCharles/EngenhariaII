@@ -57,7 +57,7 @@ class Model_Banco_Secretario(Model_Secretario):
 			texto = self.cursor.fetchall()
 			saida = ""
 			for linha in texto:
-				print(linha)
+				saida += str(linha[0])+"\n"
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :
@@ -114,6 +114,8 @@ if __name__== '__main__':
 
 	S = Model_Banco_Secretario()
 	S.criar_tabela()
+	S.set_login("admin")
+	S.set_senha("1234")
 	S.salvar_secretario()
-	print(S.validar_secretario())
-	print(S.listar_secretario())
+	#print(S.validar_secretario())
+	#print(S.listar_secretario())
