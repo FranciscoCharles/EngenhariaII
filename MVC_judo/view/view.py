@@ -7,6 +7,7 @@ import sys
 sys.path.append("../")
 
 from controller.Controller_Secretario import*
+from controller.Controller_Participante import*
 
 diretorio_imagens = 'C:\\Users\\Charles\\Desktop\\aulas\\Engenharia\\MVC_judo\\image\\'
 
@@ -86,7 +87,25 @@ class LoginInicial(Frame):
 		self.botao_fechar.grid(row=0,column=10)
 		
 	def valida_dados(self,controler):
-		controler.show_frame(MenuPrincipal)
+		S = Controller_Secretario()
+		S.set_login(self.entrada_login.get())
+		S.set_senha(self.entrada_senha.get())
+		
+		if(S.login_vazio() and S.senha_vazia()):
+			messagebox.showwarning("Aviso", "Preencha os Campos")
+		elif(S.login_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo de Login")
+		elif(S.senha_vazia()):
+			messagebox.showwarning("Aviso", "Preencha o Campo de Senha")
+		elif(S.validar_secretario()):
+			self.limpar_campos(controler)
+			messagebox.showinfo("Acesso", S.get_login()+" Seja Bem Vindo ao Nosso Sistema")
+			controler.show_frame(MenuPrincipal)
+		else:
+			self.limpar_campos(controler)
+			messagebox.showerror("Erro", "Login ou Senha Invalidos")
+			controler.show_frame(LoginInicial)
+		
 	def limpar_campos(self,controler):
 		self.entrada_login.delete(0, END)
 		self.entrada_senha.delete(0, END)
@@ -143,7 +162,7 @@ class Secretario(Frame):
 		self.botao_listar.pack()
 		self.botao_remover.pack()
 		self.botao_sair.pack()
-#MENU PARTICIAPNTE
+#MENU Participante
 class CadastrarParticipante(Frame):
 	def __init__(self,parent,controler):
 		
@@ -249,6 +268,29 @@ class CadastrarParticipante(Frame):
 			self.tipo1.deselect()
 			self.tipo2_s = False
 			self.tipo2.deselect()
+	def valida_dados(self,controler):
+		P = Controller_Participante()
+		P.set_nome(self.entrada_nome.get())
+		P.set_cpf(self.entrada_cpf.get())
+		P.set_data(self.entrada_data.get())
+		P.set_academia(self.entrada_academia.get())
+		P.set_graduacao(self.entrada_faixa.get())
+		P.set_endereco(self.entrada_endereco.get())
+
+		if(P.nome_vazio() and P.data_vazia() and P.cpf_vazio()):
+			messagebox.showwarning("Aviso", "Preencha os Campos")
+		elif(P.nome_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo de Nome")
+		elif(P.data_vazia()):
+			messagebox.showwarning("Aviso", "Preencha o Campo de Data")
+		elif(not P.este_participante_existe()):
+			self.limpar_campos(controler)
+			messagebox.showinfo("Participante Cadastrado com Sucesso!")
+			controler.show_frame(MenuPrincipal)
+		else:
+			self.limpar_campos(controler)
+			messagebox.showerror("Erro", "Nao foi Possivel Cadastrar.")
+			controler.show_frame(LoginInicial)
 	def limpar_campos(self,controler):
 		self.tipo1_s = False
 		self.tipo2_s = False
@@ -303,7 +345,30 @@ class CadastrarSecretario(Frame):
 		self.entrada_senha.delete(0,END)
 		self.entrada_rep_senha.delete(0,END)
 	def valida_dados(self,controler):
-		pass
+		S = Controller_Secretario()
+		S.set_login(self.entrada_login.get())
+		S.set_senha(self.entrada_senha.get())
+		
+		rep_senha = self.entrada_rep_senha.get()
+		if(S.login_vazio() and S.senha_vazia() and rep_senha==""):
+			messagebox.showwarning("Aviso", "Preencha os Campos!")
+		elif(S.login_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo de Login!")
+		elif(S.senha_vazia()):
+			messagebox.showwarning("Aviso", "Preencha o Campo de Senha!")
+		elif(rep_senha==""):
+			messagebox.showwarning("Aviso", "Preencha o Campo de rep_senha!")
+		elif(not (S.get_senha() == rep_senha)):
+			messagebox.showwarning("Aviso", "Senhas diferem!")
+		elif(not S.este_secretario_existe()):
+			self.limpar_campos(controler)
+			S.salvar_secretario()
+			messagebox.showinfo("Sucesso", "Usuario adcionado com sucesso")
+			controler.show_frame(Secretario)
+		else:
+			self.limpar_campos(controler)
+			messagebox.showerror("Erro", "Login ou Senha Invalidos")
+			controler.show_frame(CadastrarSecretario)
 class CadastrarTorneio(Frame):
 	def __init__(self,parent,controler):
 		Frame.__init__(self,parent)
@@ -432,6 +497,7 @@ class ListarSecretario(Frame):
 		Frame.__init__(self,parent)
 		self['bg'] = COR_FUNDO
 		total_labels = 22
+		self.Secretario = Controller_Secretario()
 		
 		self.frame_titulo = Frame(self, bg = COR_FUNDO,pady=10,padx=10,height=600,width=900)
 		self.frame_titulo.pack()
@@ -439,39 +505,53 @@ class ListarSecretario(Frame):
 		self.titulo.grid(row=0,column=1)
 		self.frame_texto = Frame(self, bg = COR_FUNDO,pady=10,padx=10,height=100,width=100)
 		self.frame_texto.pack()
-		barra_rolagem = Scrollbar(self.frame_texto)
-		barra_rolagem.pack(side=RIGHT, fill=Y)
+		self.barra_rolagem = Scrollbar(self.frame_texto)
+		self.barra_rolagem.pack(side=RIGHT, fill=Y)
 		
-		C = Controller_Secretario()
-		texto = C.listar_secretario()
-		mensagem = Listbox(self.frame_texto, yscrollcommand = barra_rolagem.set,width=50,height=20)
-		for linha in str(texto).split():
-			mensagem.insert(END,linha)
-		mensagem.pack()
-		barra_rolagem.config(command=mensagem.yview)
-		botao = Button(self,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text="fechar",width= 10, command= lambda: controler.show_frame(Secretario))
-		botao.pack()
+		self.mensagem = Listbox(self.frame_texto, yscrollcommand = self.barra_rolagem.set,width=50,height=20)
+		self.atualizar_texto(controler)
+		self.mensagem.pack()
+		self.botao = Button(self,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text="fechar",width= 10, command=lambda:self.atualizar_texto(controler))
+		self.barra_rolagem.config(command=self.mensagem.yview)
+		self.botao.pack()
+	
+	def atualizar_texto(self, controler):
+		self.texto = ""
+		self.texto = self.Secretario.listar_secretario()
+		self.limpar_mensagem()
+		for linha in self.texto.split('\n'):
+			self.mensagem.insert(END,linha)
+		controler.show_frame(Secretario)
+	def limpar_mensagem(self):
+		self.mensagem.delete(0,self.mensagem.size())
 class ListarParticipante(Frame):
 	def __init__(self,parent,controler):
 		Frame.__init__(self,parent)
 		self['bg'] = COR_FUNDO
 		total_labels = 22
+		self.Participante = Controller_Participante()
 		self.frame_titulo = Frame(self, bg = COR_FUNDO,pady=10,padx=10,height=600,width=900)
 		self.frame_titulo.pack()
-		self.titulo = Label(self.frame_titulo,text= "Listando Secretarios",width=40,height=2)
+		self.titulo = Label(self.frame_titulo,text= "Listando Participantes",width=40,height=2)
 		self.titulo.grid(row=0,column=1)
 		self.frame_texto = Frame(self, bg = COR_FUNDO,pady=10,padx=10,height=100,width=100)
 		self.frame_texto.pack()
-		barra_rolagem = Scrollbar(self.frame_texto)
-		barra_rolagem.pack(side=RIGHT, fill=Y)
-		texto = "Texto"
-		mensagem = Listbox(self.frame_texto, yscrollcommand = barra_rolagem.set,width=50,height=20)
-		for linha in str(texto).split():
-			mensagem.insert(END,linha)
-		mensagem.pack()
-		barra_rolagem.config(command=mensagem.yview)
-		botao = Button(self,text="fechar",width= 10, command= lambda: controler.show_frame(Academia))
-		botao.pack()
+		self.barra_rolagem = Scrollbar(self.frame_texto)
+		self.barra_rolagem.pack(side=RIGHT, fill=Y)
+		self.mensagem = Listbox(self.frame_texto, yscrollcommand = self.barra_rolagem.set,width=50,height=20)
+		self.mensagem.pack()
+		self.barra_rolagem.config(command=self.mensagem.yview)
+		self.botao = Button(self,text="fechar",width= 10, command= lambda: self.atualizar_texto(controler))
+		self.botao.pack()
+	def atualizar_texto(self, controler):
+		self.texto = ""
+		self.texto = self.Participante.listar_participante()
+		self.limpar_mensagem()
+		for linha in self.texto.split('\n'):
+			self.mensagem.insert(END,linha)
+		controler.show_frame(CadastrarParticipante)
+	def limpar_mensagem(self):
+		self.mensagem.delete(0,self.mensagem.size())
 #GERAR CARTEIRINHA
 class GerarCarteirinha(Frame):
 	def __init__(self,parent,controler):
