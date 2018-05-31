@@ -2,12 +2,39 @@
 import sys
 import unittest
 sys.path.append("../")
+
 from controller.Controller_Torneio import*
 
 class Teste_Torneio(unittest.TestCase):
 	def setUp(self):
 		self.torneio = Controller_Torneio()
 	#teste de campos vazios
+	def teste_horario_vazio(self):
+		self.torneio.set_horario("")
+		self.assertTrue(self.torneio.horario_vazio())
+	def teste_horario_nao_vazio(self):
+		self.torneio.set_horario("03:56")
+		self.assertFalse(self.torneio.horario_vazio())
+	def teste_hora_valida(self):
+		self.assertTrue(self.torneio.hora_valida(10))
+	def teste_hora_invalida(self):
+		self.assertFalse(self.torneio.hora_valida(67))
+	def teste_minutos_valido(self):
+		self.assertTrue(self.torneio.minutos_valido(10))
+	def teste_minutos_invalido(self):
+		self.assertFalse(self.torneio.minutos_valido(-1))
+	def teste_separa_horario_valido(self):
+		self.torneio.set_horario("03:45")
+		self.assertTrue(self.torneio.separa_horario())
+	def teste_separa_horario_invalido(self):
+		self.torneio.set_horario("03:45/")
+		self.assertFalse(self.torneio.separa_horario())
+	def teste_horario_possui_caractere_invalido(self):
+		self.torneio.set_horario("03:45/")
+		self.assertTrue(self.torneio.horario_possui_caractere_invalido())
+	def teste_horario_nao_possui_caractere_invalido(self):
+		self.torneio.set_horario("03:45")
+		self.assertFalse(self.torneio.horario_possui_caractere_invalido())
 	def teste_nome_vazio(self):
 		self.torneio.set_nome("")
 		self.assertTrue(self.torneio.nome_vazio())

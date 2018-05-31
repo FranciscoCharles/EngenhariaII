@@ -3,11 +3,11 @@ import sys
 import unittest
 sys.path.append("../")
 
-from controller.Controller_Participante import*
+from controller.Controller_Participante_Torneio import*
 
-class Teste_Participante(unittest.TestCase):
+class Teste_Participante_Torneio(unittest.TestCase):
 	def setUp(self):
-		self.participante = Controller_Participante()
+		self.participante = Controller_Participante_Torneio()
 	def teste_dia_valido(self):
 		self.assertTrue(self.participante.valida_dia(5))
 	def teste_dia_invalido(self):
@@ -78,6 +78,17 @@ class Teste_Participante(unittest.TestCase):
 	def teste_endereco_nao_vazio(self):
 		self.participante.set_endereco("rua dos bobos numero zero")
 		self.assertFalse(self.participante.endereco_vazio())
+	def teste_torneio_nao_vazio(self):
+		self.participante.set_torneio("torneio de forca")
+		self.assertFalse(self.participante.torneio_vazio())
+	def teste_torneio_vazio(self):
+		self.assertTrue(self.participante.torneio_vazio())
+	def teste_pago_nao_vazio(self):
+		self.participante.set_endereco("False")
+		self.assertFalse(self.participante.pago_vazio())
+	def teste_pago_vazio(self):
+		self.participante.set_pago("")
+		self.assertTrue(self.participante.pago_vazio())
 	def teste_telefone_valido(self):
 		self.participante.set_telefone("(88)99923423")
 		self.assertTrue(self.participante.telefone_valido())
@@ -86,6 +97,12 @@ class Teste_Participante(unittest.TestCase):
 		self.assertFalse(self.participante.telefone_valido())
 	def teste_dados_invalidos(self):
 		self.assertFalse(self.participante.dados_validos())
+	def teste_pago_valido(self):
+		self.participante.set_pago("False")
+		self.assertTrue(self.participante.pago_valido())
+	def teste_pago_invalido(self):
+		self.participante.set_pago("issjd")
+		self.assertFalse(self.participante.pago_valido())
 	def teste_dados_validos(self):
 		self.participante.set_nome("sei la")
 		self.participante.set_academia("Cobra")
@@ -95,6 +112,8 @@ class Teste_Participante(unittest.TestCase):
 		self.participante.set_tipo("Aluno")
 		self.participante.set_endereco("rua dos bobos")
 		self.participante.set_telefone("(89)99999999")
+		self.participante.set_pago("False")
+		self.participante.set_torneio("torneio de forca")
 		self.assertTrue(self.participante.dados_validos())
 	def teste_salvar_participante(self):
 		self.assertFalse(self.participante.salvar_participante())
