@@ -54,43 +54,43 @@ class Controller_Participante_Torneio(Model_Banco_Participante_Torneio):
 		return False
 	
 	def nome_vazio(self):
-		if (self.get_nome() is None) or (len(self.get_nome()) == 0):
+		if (self.get_nome() == None) or (len(self.get_nome()) == 0):
 			return True
 		return False
 	def nascimento_vazio(self):
-		if (self.get_nascimento() is None) or (len(self.get_nascimento()) == 0):
+		if (self.get_nascimento() == None) or (len(self.get_nascimento()) == 0):
 			return True
 		return False
 	def cpf_vazio(self):
-		if (self.get_cpf() is None) or (len(self.get_cpf()) == 0):
+		if (self.get_cpf() == None) or (len(self.get_cpf()) == 0):
 			return True
 		return False
 	def telefone_vazio(self):
-		if (self.get_telefone() is None) or (len(self.get_telefone()) == 0) :
+		if (self.get_telefone() == None) or (len(self.get_telefone()) == 0) :
 			return True
 		return False
 	def academia_vazia(self):
-		if (self.get_academia() is None) or (len(self.get_academia()) == 0):
+		if (self.get_academia() == None) or (len(self.get_academia()) == 0):
 			return True
 		return False
 	def graduacao_vazia(self):
-		if (self.get_graduacao() is None) or (len(self.get_graduacao()) == 0):
+		if (self.get_graduacao() == None) or (len(self.get_graduacao()) == 0):
 			return True
 		return False
 	def tipo_vazio(self):
-		if (self.get_tipo() is None) or (len(self.get_tipo()) == 0):
+		if (self.get_tipo() == None) or (len(self.get_tipo()) == 0):
 			return True
 		return False
 	def endereco_vazio(self):
-		if (self.get_endereco() is None) or (len(self.get_endereco()) == 0):
+		if (self.get_endereco() == None) or (len(self.get_endereco()) == 0):
 			return True
 		return False
 	def torneio_vazio(self):
-		if (self.get_torneio() is None) or (len(self.get_torneio()) == 0):
+		if (self.get_torneio() == None) or (len(self.get_torneio()) == 0):
 			return True
 		return False
 	def pago_vazio(self):
-		if (self.get_pago() is None) or (len(self.get_pago()) == 0):
+		if (self.get_pago() == None) or (len(self.get_pago()) == 0):
 			return True
 		return False
 	def pago_valido(self):
