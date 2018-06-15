@@ -13,8 +13,8 @@ class Model_Academia(object):
 	__email = None
 	
 	def __init__(self):
-		self.inicialicao_padrao()
-	def inicialicao_padrao(self):
+		self.inicializacao_padrao()
+	def inicializacao_padrao(self):
 		self.set_nome(None)
 		self.set_data(None)
 		self.set_local(None)

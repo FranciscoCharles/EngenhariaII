@@ -11,6 +11,7 @@ class Model_Participante(object):
 	__academia = None
 	__telefone = None
 	__tipo = None
+	__sexo = None
 	__inscricao = None
 	__endereco = None
 	
@@ -27,6 +28,7 @@ class Model_Participante(object):
 		self.set_endereco(None)
 		self.set_telefone(None)
 		self.set_tipo(None)
+		self.set_sexo(None)
 		
 	def get_nome(self):
 		return self.Model_Participante__nome
@@ -35,17 +37,19 @@ class Model_Participante(object):
 	def get_cpf(self):
 		return self.Model_Participante__cpf
 	def get_graduacao(self):
-		return self.Model__Participante__graduacao
+		return self.Model_Participante__graduacao
 	def get_tipo(self):
-		return self.Model__Participante__tipo
+		return self.Model_Participante__tipo
 	def get_telefone(self):
-		return self.Model__Participante__telefone
+		return self.Model_Participante__telefone
 	def get_academia(self):
-		return self.Model__Participante__academia
+		return self.Model_Participante__academia
 	def get_inscricao(self):
-		return self.Model__Participante__inscricao
+		return self.Model_Participante__inscricao
 	def get_endereco(self):
-		return self.Model__Participante__endereco
+		return self.Model_Participante__endereco
+	def get_sexo(self):
+		return self.Model_Participante__sexo
 	#set's
 	def set_nome(self, nome):
 		self.Model_Participante__nome = nome
@@ -54,17 +58,19 @@ class Model_Participante(object):
 	def set_cpf(self, cpf):
 		self.Model_Participante__cpf = cpf
 	def set_graduacao(self, graduacao):
-		self.Model__Participante__graduacao = graduacao
+		self.Model_Participante__graduacao = graduacao
 	def set_tipo(self, tipo):
-		self.Model__Participante__tipo = tipo
+		self.Model_Participante__tipo = tipo
 	def set_telefone(self , telefone):
-		self.Model__Participante__telefone = telefone
+		self.Model_Participante__telefone = telefone
 	def set_academia(self, academia):
-		self.Model__Participante__academia = academia
+		self.Model_Participante__academia = academia
 	def set_endereco(self, endereco):
-		self.Model__Participante__endereco = endereco
+		self.Model_Participante__endereco = endereco
 	def set_inscricao(self, inscricao):
-		self.Model__Participante__inscricao = inscricao
+		self.Model_Participante__inscricao = inscricao
+	def set_sexo(self, sexo):
+		self.Model_Participante__sexo = sexo
 	
 if __name__== '__main__':
 	pass

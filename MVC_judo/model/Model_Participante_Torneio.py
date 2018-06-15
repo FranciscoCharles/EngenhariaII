@@ -11,6 +11,7 @@ class Model_Participante_Torneio(object):
 	__academia = None
 	__telefone = None
 	__tipo = None
+	__sexo = None
 	__inscricao = None
 	__torneio = None
 	__endereco = None
@@ -31,7 +32,7 @@ class Model_Participante_Torneio(object):
 		self.set_tipo(None)
 		self.set_torneio(None)
 		self.set_pago("False")
-		
+		self.set_sexo(None)
 	def get_nome(self):
 		return self.Model_Participante_Torneio__nome
 	def get_nascimento(self):
@@ -54,6 +55,8 @@ class Model_Participante_Torneio(object):
 		return self.Model_Participante_Torneio__torneio
 	def get_pago(self):
 		return self.Model_Participante_Torneio__pago
+	def get_sexo(self):
+		return self.Model_Participante_Torneio__sexo
 	#set's
 	def set_nome(self, nome):
 		self.Model_Participante_Torneio__nome = nome
@@ -77,6 +80,7 @@ class Model_Participante_Torneio(object):
 		self.Model_Participante_Torneio__torneio = torneio
 	def set_pago(self, pago):
 		self.Model_Participante_Torneio__pago = pago
-	
+	def set_sexo(self, sexo):
+		self.Model_Participante_Torneio__sexo = sexo
 if __name__== '__main__':
 	pass

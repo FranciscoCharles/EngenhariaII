@@ -27,15 +27,17 @@ class Model_Banco_Participante(Model_Participante):
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS participante (
-					inscricao INTEGER PRIMARY KEY AUTOINCREMENT,
+					inscricao INTEGER AUTOINCREMENT,
 					nome VARCHAR(100) NOT NULL,
 					academia VARCHAR(120) NOT NULL,
 					nascimento VARCHAR(10) NOT NULL,
 					endereco VARCHAR(100) NOT NULL,
 					cpf VARCHAR(20) NOT NULL,
 					tipo VARCHAR(20) NOT NULL,
+					sexo VARCHAR(10) NOT NULL,
 					graduacao VARCHAR(20) NOT NULL,
-					telefone VARCHAR(12) NOT NULL
+					telefone VARCHAR(12) NOT NULL,
+					PRIMARY KEY (inscricao)
 				);
 			""")
 			self.conecao.close()
@@ -51,7 +53,7 @@ class Model_Banco_Participante(Model_Participante):
 			if not self.este_participante_existe():
 				self.conecao = sqlite3.connect(self.get_caminho())
 				self.cursor = self.conecao.cursor()
-				resultado = self.cursor.execute("INSERT INTO participante (inscricao,nome,academia,nascimento,endereco,cpf,tipo,graduacao,telefone) VALUES (NULL,?,?,?,?,?,?,?,?)",(self.get_nome(),self.get_academia(),self.get_nascimento(),self.get_endereco(),self.get_cpf(),self.get_tipo(),self.get_graduacao(),self.get_telefone(),))
+				resultado = self.cursor.execute("INSERT INTO participante (nome,academia,nascimento,endereco,cpf,tipo,sexo,graduacao,telefone) VALUES (?,?,?,?,?,?,?,?,?)",(self.get_nome(),self.get_academia(),self.get_nascimento(),self.get_endereco(),self.get_cpf(),self.get_tipo(),self.get_sexo(),self.get_graduacao(),self.get_telefone(),))
 				self.conecao.commit()
 				self.conecao.close()
 				if resultado is not None:
@@ -78,7 +80,7 @@ class Model_Banco_Participante(Model_Participante):
 				self.conecao = sqlite3.connect(self.get_caminho())
 				self.cursor = self.conecao.cursor()
 				# excluindo um registro da tabela
-				saida = self.cursor.execute("DELETE FROM participante WHERE (nome=?) AND (academia=?)", (self.get_nome(),self.get_academia(),))
+				saida = self.cursor.execute("DELETE FROM participante WHERE (nome=?) AND (academia=?) AND (inscricao=?)", (self.get_nome(),self.get_academia(),self.get_inscricao(),))
 				self.conecao.commit()
 				self.conecao.close()
 				if saida is not None:
@@ -86,11 +88,11 @@ class Model_Banco_Participante(Model_Participante):
 		except sqlite3.Error :
 			pass
 		return False
-	def buscar_participante_por_id(self):
+	def buscar_participante_por_inscricao(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			saida = self.cursor.execute("SELECT * FROM participante WHERE (id=?)", (self.get_id(),))
+			saida = self.cursor.execute("SELECT * FROM participante WHERE (id=?)", (self.get_inscricao(),))
 			saida = self.cursor.fetchone()
 			self.conecao.close();
 			return saida

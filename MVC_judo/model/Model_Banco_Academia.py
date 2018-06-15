@@ -27,12 +27,12 @@ class Model_Banco_Academia(Model_Academia):
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS academia (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					nome VARCHAR(100) NOT NULL,
+					nome VARCHAR(40) NOT NULL,
 					data VARCHAR(10) NOT NULL,
 					local VARCHAR(10) NOT NULL,
 					contato VARCHAR(12) NOT NULL,
-					email TEXT NOT NULL,
-					responsavel VARCHAR(10) NOT NULL,
+					email VARCHAR(30) NOT NULL,
+					responsavel VARCHAR(30) NOT NULL,
 					PRIMARY KEY(nome),
 					FOREIGN KEY (nome) REFERENCES participante(academia)
 				);
@@ -75,7 +75,7 @@ class Model_Banco_Academia(Model_Academia):
 				self.conecao = sqlite3.connect(self.get_caminho())
 				self.cursor = self.conecao.cursor()
 				# excluindo um registro da tabela
-				saida = self.cursor.execute("DELETE FROM academia WHERE (nome=?)", (self.get_nome(),))
+				saida = self.cursor.execute("DELETE FROM academia WHERE (nome=?) AND (id=?)", (self.get_nome(),self.get_id(),))
 				self.conecao.commit()
 				self.conecao.close()
 				if saida is not None:
