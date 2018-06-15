@@ -17,8 +17,9 @@ linguaguem :
 status do processo:
 	em desenvolvimento...78%
 versao atual :
-	01-15.06.2018-pt-br
+	02-15.06.2018-pt-br
 versoes anteriores:
+	01-15.06.2018-pt-br
 	01-30.05.2018-pt-br
 	01-27.05.2018-pt-br
 	01-19.05.2018-pt-br
