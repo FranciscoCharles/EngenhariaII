@@ -12,6 +12,7 @@ class Model_Banco_Participante(Model_Participante):
 	def __init__(self):
 		super().__init__()
 		self.set_caminho("C:\\Users\\Charles\\Desktop\\aulas\\Engenharia\\MVC_judo\\banco\\banco_dados.db")
+		self.criar_tabela()
 	#get's'
 	def get_caminho(self):
 		return self.Model_Banco_Participante__caminho_banco
@@ -26,7 +27,7 @@ class Model_Banco_Participante(Model_Participante):
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS participante (
-					inscricao INT AUTO_INCREMENT DEFAULT 1,
+					inscricao INTEGER PRIMARY KEY AUTOINCREMENT,
 					nome VARCHAR(100) NOT NULL,
 					academia VARCHAR(120) NOT NULL,
 					nascimento VARCHAR(10) NOT NULL,
@@ -34,8 +35,7 @@ class Model_Banco_Participante(Model_Participante):
 					cpf VARCHAR(20) NOT NULL,
 					tipo VARCHAR(20) NOT NULL,
 					graduacao VARCHAR(20) NOT NULL,
-					telefone VARCHAR(12) NOT NULL,
-					PRIMARY KEY(nome)
+					telefone VARCHAR(12) NOT NULL
 				);
 			""")
 			self.conecao.close()
@@ -48,10 +48,10 @@ class Model_Banco_Participante(Model_Participante):
 		pass
 	def salvar_participante(self):
 		try:
-			if not self.esta_participante_existe():
+			if not self.este_participante_existe():
 				self.conecao = sqlite3.connect(self.get_caminho())
 				self.cursor = self.conecao.cursor()
-				resultado = self.cursor.execute("INSERT INTO participante (nome,academia,nascimento,endereco,cpf,tipo,graduacao,telefone) VALUES (?,?,?,?,?,?,?,?)",(self.get_nome(),self.get_academia(),self.get_nascimento(),self.get_endereco(),self.get_cpf(),self.get_tipo(),self.get_graduacao(),self.get_telefone(),))
+				resultado = self.cursor.execute("INSERT INTO participante (inscricao,nome,academia,nascimento,endereco,cpf,tipo,graduacao,telefone) VALUES (NULL,?,?,?,?,?,?,?,?)",(self.get_nome(),self.get_academia(),self.get_nascimento(),self.get_endereco(),self.get_cpf(),self.get_tipo(),self.get_graduacao(),self.get_telefone(),))
 				self.conecao.commit()
 				self.conecao.close()
 				if resultado is not None:
@@ -67,14 +67,14 @@ class Model_Banco_Participante(Model_Participante):
 			texto = self.cursor.fetchall()
 			saida = ""
 			for linha in texto:
-				saida += str(linha[1])+"\n"
+				saida += str(linha)+"\n"
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :
 			pass
 	def remover_participante(self):	
 		try:
-			if self.este_secretario_existe():
+			if self.este_participante_existe():
 				self.conecao = sqlite3.connect(self.get_caminho())
 				self.cursor = self.conecao.cursor()
 				# excluindo um registro da tabela
@@ -100,13 +100,13 @@ class Model_Banco_Participante(Model_Participante):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			saida = self.cursor.execute("SELECT * FROM participante WHERE (cpf=?)", (self.get_cpf(),))
+			saida = self.cursor.execute("SELECT * FROM participante WHERE (cpf=?) AND (academia=?)", (self.get_cpf(),self.get_academia(),))
 			saida = self.cursor.fetchone()
 			self.conecao.close();
 			return saida
 		except sqlite3.Error :
 			pass
-	def buscar_participante_por_nome_e_academia(self):
+	def buscar_participante_por_nome(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
@@ -116,11 +116,34 @@ class Model_Banco_Participante(Model_Participante):
 			return saida
 		except sqlite3.Error :
 			pass
-	def esta_participante_existe(self):
+	def get_participante(self):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			saida = self.cursor.execute("SELECT * FROM participante WHERE (nome=?) AND (academia=?)", (self.get_nome(),self.get_academia(),))
+			saida = self.cursor.execute("SELECT * FROM participante WHERE (academia=?) AND (cpf=?)", (self.get_academia(),self.get_cpf(),))
+			saida = self.cursor.fetchone()
+			self.conecao.close();
+			if saida is not None:
+				P = Model_Participante()
+				P.set_inscricao(saida[0])
+				P.set_nome(saida[1])
+				P.set_academia(saida[2])
+				P.set_nascimento(saida[3])
+				P.set_endereco(saida[4])
+				P.set_cpf(saida[5])
+				P.set_tipo(saida[6])
+				P.set_graduacao(saida[7])
+				P.set_telefone(saida[8])
+				return P
+			else:
+				return None
+		except sqlite3.Error :
+			pass
+	def este_participante_existe(self):
+		try:
+			self.conecao = sqlite3.connect(self.get_caminho())
+			self.cursor = self.conecao.cursor()
+			saida = self.cursor.execute("SELECT * FROM participante WHERE (nome=?) AND (academia=?) AND (cpf=?)", (self.get_nome(),self.get_academia(),self.get_cpf(),))
 			saida = saida.fetchone()
 			self.conecao.close();
 			if saida is not None:
@@ -132,16 +155,17 @@ class Model_Banco_Participante(Model_Participante):
 if __name__== '__main__':
 	P = Model_Banco_Participante()
 	print(P.criar_tabela())
-	P.set_nome("sei la")
+	P.set_nome("Boi")
 	P.set_academia("Cobra")
 	P.set_nascimento("13/10/2019")
 	P.set_graduacao("preta")
-	P.set_cpf("368599010")
+	P.set_cpf("666668")
 	P.set_tipo("Aluno")
 	P.set_endereco("rua dos bobos")
-	P.set_telefone("(89)99999999")
+	P.set_telefone("(89)9999999")
 	
-	print(P.esta_participante_existe())
-	print(P.salvar_participante())
 	
-	P.listar_participante()
+	print(P.este_participante_existe())
+	print("salvou "+str(P.salvar_participante()))
+	#P.remover_participante()
+	print(P.listar_participante())

@@ -11,6 +11,7 @@ class Model_Banco_Academia(Model_Academia):
 	def __init__(self):
 		super().__init__()
 		self.set_caminho("C:\\Users\\Charles\\Desktop\\aulas\\Engenharia\\MVC_judo\\banco\\banco_dados.db")
+		self.criar_tabela()
 	#get's'
 	def get_caminho(self):
 		return self.Model_Banco_Academia__caminho_banco
@@ -25,7 +26,7 @@ class Model_Banco_Academia(Model_Academia):
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS academia (
-					id INT AUTO_INCREMENT DEFAULT 1,
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					nome VARCHAR(100) NOT NULL,
 					data VARCHAR(10) NOT NULL,
 					local VARCHAR(10) NOT NULL,
@@ -117,7 +118,6 @@ class Model_Banco_Academia(Model_Academia):
 if __name__== '__main__':
 
 	A = Model_Banco_Academia()
-	A.criar_tabela()
 	A.set_nome("cobra")
 	A.set_data("10/07/1990")
 	A.set_local("Picos-PI")

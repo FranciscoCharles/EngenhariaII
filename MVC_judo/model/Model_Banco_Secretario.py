@@ -12,6 +12,7 @@ class Model_Banco_Secretario(Model_Secretario):
 	def __init__(self):
 		super().__init__()
 		self.set_caminho("C:\\Users\\Charles\\Desktop\\aulas\\Engenharia\\MVC_judo\\banco\\banco_dados.db")
+		self.criar_tabela()
 	#get's'
 	def get_caminho(self):
 		return self.Model_Banco_Secretario__caminho_banco
@@ -53,7 +54,7 @@ class Model_Banco_Secretario(Model_Secretario):
 		try:
 			self.conecao = sqlite3.connect(self.get_caminho())
 			self.cursor = self.conecao.cursor()
-			self.cursor.execute("SELECT * FROM secretario;")
+			self.cursor.execute("SELECT * FROM secretario ORDER BY login")
 			texto = self.cursor.fetchall()
 			saida = ""
 			for linha in texto:
@@ -116,6 +117,7 @@ if __name__== '__main__':
 	S.criar_tabela()
 	S.set_login("admin")
 	S.set_senha("1234")
-	S.salvar_secretario()
+	print(S.este_secretario_existe())
+	print(S.salvar_secretario())
 	#print(S.validar_secretario())
-	#print(S.listar_secretario())
+	print(S.listar_secretario())

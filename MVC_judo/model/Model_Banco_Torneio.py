@@ -24,6 +24,7 @@ class Model_Banco_Torneio(Model_Torneio):
 	def __init__(self):
 		super().__init__()
 		self.set_caminho("C:\\Users\\Charles\\Desktop\\aulas\\Engenharia\\MVC_judo\\banco\\banco_dados.db")
+		self.criar_tabela()
 	#get's'
 	def get_caminho(self):
 		return self.Model_Banco_Torneio__caminho_banco
@@ -38,14 +39,13 @@ class Model_Banco_Torneio(Model_Torneio):
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS torneio (
-					id INT AUTO_INCREMENT DEFAULT 1,
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					nome VARCHAR(100) NOT NULL,
 					data VARCHAR(10) NOT NULL,
 					local VARCHAR(10) NOT NULL,
 					contato VARCHAR(12) NOT NULL,
 					horario VARCHAR(7) NOT NULL,
 					organizador VARCHAR(10) NOT NULL,
-					PRIMARY KEY(nome),
 					FOREIGN KEY (nome) REFERENCES participante_torneio(torneio)
 					);
 			""")

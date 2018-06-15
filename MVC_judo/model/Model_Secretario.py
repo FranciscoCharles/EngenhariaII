@@ -14,7 +14,7 @@ class Model_Secretario(object):
 	__MAX_SENHA = None
 	
 	def __init__(self):
-		self.inicialicao_padrao()
+		self.inicializacao_padrao()
 		
 	#get's
 	def get_login(self):
@@ -45,7 +45,7 @@ class Model_Secretario(object):
 		self.Model_Secretario__MIN_SENHA = min
 		
 	#metodos de validacao
-	def inicialicao_padrao(self):
+	def inicializacao_padrao(self):
 		self.set_max_login(30)
 		self.set_max_senha(30)
 		self.set_min_login(4)
