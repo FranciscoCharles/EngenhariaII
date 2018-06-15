@@ -54,7 +54,7 @@ class Gerenciador(tk.Tk):
 		container.grid_columnconfigure(0,weight=1)
 		
 		TELAS = [LoginInicial,MenuPrincipal,
-				MenuAcademia,GerarCarteirinha,ListarAcademia,
+				MenuAcademia,GerarCarteirinha,ListarAcademia,RemoverAcademia,
 				MenuParticipante,CadastrarParticipante,ListarParticipante,
 				MenuTorneio,CadastrarTorneio,
 				MenuSecretario,CadastrarSecretario,ListarSecretario,RemoverSecretario,
@@ -121,20 +121,19 @@ class LoginInicial(Frame):
 		if(Base_Secretario.login_vazio() and Base_Secretario.senha_vazia()):
 			messagebox.showwarning("Aviso", "Preencha os Campos")
 		elif(Base_Secretario.login_vazio()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Login")
+			messagebox.showwarning("Aviso", "Preencha o Campo Login")
 		elif(Base_Secretario.senha_vazia()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Senha")
+			messagebox.showwarning("Aviso", "Preencha o Campo Senha")
 		elif(Base_Secretario.validar_secretario()):
-			self.limpar_campos(controler)
-			messagebox.showinfo("Acesso", Base_Secretario.get_login()+" Seja Bem Vindo ao Nosso Sistema")
+			self.limpar_campos()
+			messagebox.showinfo("Acesso", Base_Secretario.get_login()+" Seja bem vindo ao nosso sistema")
 			Base_Secretario.inicializacao_padrao()
 			controler.show_frame(MenuPrincipal)
 		else:
-			self.limpar_campos(controler)
+			self.limpar_campos()
 			messagebox.showerror("Erro", "Login ou Senha Invalidos")
-			controler.show_frame(LoginInicial)
 		
-	def limpar_campos(self,controler):
+	def limpar_campos(self):
 		self.entrada_login.delete(0, END)
 		self.entrada_senha.delete(0, END)
 
@@ -144,7 +143,7 @@ class MenuPrincipal(Frame):
 	def __init__(self,parent,controler):
 		Frame.__init__(self,parent)
 		self['bg'] = COR_FUNDO
-		self.frame_menu = Frame(self, bg = COR_FUNDO,pady=100)
+		self.frame_menu = Frame(self, bg = COR_FUNDO,pady=75)
 		self.frame_menu.pack()
 		self.botao_academia = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Academia",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = lambda:controler.show_frame(MenuAcademia),activebackground='green',font=FONTE_PADRAO)
 		self.botao_torneio = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Torneio",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = lambda:controler.show_frame(MenuTorneio),activebackground='green',font=FONTE_PADRAO)
@@ -168,7 +167,7 @@ class MenuAcademia(Frame):
 		self.botao_adcionar = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Adicionar Academia",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = None,activebackground='green',font=FONTE_PADRAO)
 		self.botao_listar = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Listar Academia",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = lambda:controler.show_frame(ListarAcademia),activebackground='green',font=FONTE_PADRAO)
 		self.botao_listar_participante = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Listar Participante",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = lambda:controler.show_frame(ListarParticipante),activebackground='green',font=FONTE_PADRAO)
-		self.botao_remover = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Remover Academia",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = None,activebackground='green',font=FONTE_PADRAO)
+		self.botao_remover = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Remover Academia",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = lambda:controler.show_frame(RemoverAcademia),activebackground='green',font=FONTE_PADRAO)
 		self.botao_carteirinha = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Gerar Carteirinha",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = lambda:controler.show_frame(GerarCarteirinha),activebackground='green',font=FONTE_PADRAO)
 		self.botao_sair = Button(self.frame_menu,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Voltar",width = LARGURA_PADRAO,height=ALTURA_PADRAO,command = lambda:controler.show_frame(MenuPrincipal),activebackground='green',font=FONTE_PADRAO)
 		self.botao_adcionar.pack()
@@ -295,9 +294,18 @@ class CadastrarParticipante(Frame):
 		self.tipo3 = Checkbutton(self.frame_tipo,text="Aluno",padx = 20,command=self.ativar_tipo3)
 		self.tipo3.pack(side = LEFT)
 		
+		self.frame_sexo = Frame(self,pady=10)
+		self.frame_sexo.pack()
+		
+		self.sexo1 = Checkbutton(self.frame_sexo,text="Masculino",padx = 20,command=self.ativar_sexo_m)
+		self.sexo1.select()
+		self.sexo1.pack(side = LEFT)
+		self.sexo2 = Checkbutton(self.frame_sexo,text="Feminino",padx = 20,command=self.ativar_sexo_f)
+		self.sexo2.pack(side = LEFT)
+		
 		self.frame_botoes = Frame(self, bg = COR_FUNDO,pady=10)
 		self.frame_botoes.pack()
-		self.botao_salvar = Button(self.frame_botoes, text = "Salvar",width = int(LARGURA_PADRAO/3),command = lambda:self.limpar_campos(controler),activebackground='green')
+		self.botao_salvar = Button(self.frame_botoes, text = "Salvar",width = int(LARGURA_PADRAO/3),command = lambda:self.valida_dados(controler),activebackground='green')
 		self.botao_salvar.grid(row=0,column=0)
 		self.botao_cancel = Button(self.frame_botoes, text = "Cancelar",width = int(LARGURA_PADRAO/3),command = lambda:self.voltar(controler),activebackground='green')
 		self.botao_cancel.grid(row=0,column=10)		
@@ -306,13 +314,13 @@ class CadastrarParticipante(Frame):
 		if self.sexo_m:
 			self.sexo = "Masculino"
 			self.sexo_f = False
-			self.sexo_f.deselect()
+			self.sexo2.deselect()
 	def ativar_sexo_f(self):
 		self.sexo_f = not self.sexo_f
 		if self.sexo_f:
 			self.sexo = "Feminino"
 			self.sexo_m = False
-			self.sexo_m.deselect()
+			self.sexo1.deselect()
 	def ativar_tipo1(self):
 		self.tipo1_s = not self.tipo1_s
 		if self.tipo1_s:
@@ -346,32 +354,46 @@ class CadastrarParticipante(Frame):
 		
 		Base_Participante.set_nome(self.entrada_nome.get())
 		Base_Participante.set_cpf(self.entrada_cpf.get())
-		Base_Participante.set_data(self.entrada_nascimento.get())
+		Base_Participante.set_nascimento(self.entrada_nascimento.get())
 		Base_Participante.set_academia(self.entrada_academia.get())
 		Base_Participante.set_graduacao(self.entrada_graduacao.get())
+		Base_Participante.set_tipo(self.tipo)
+		Base_Participante.set_sexo(self.sexo)
 		Base_Participante.set_telefone(self.entrada_telefone.get())
 		Base_Participante.set_endereco(self.entrada_endereco.get())
 
-		if(Base_Participante.nome_vazio() and Base_Participante.data_vazia() and Base_Participante.cpf_vazio()):
-			messagebox.showwarning("Aviso", "Preencha os Campos")
+		if Base_Participante.nome_vazio() and Base_Participante.nascimento_vazio() and Base_Participante.cpf_vazio() and Base_Participante.academia_vazia() and Base_Participante.graduacao_vazia() and Base_Participante.telefone_vazio() and Base_Participante.endereco_vazio() and Base_Participante.tipo_vazio():
+			messagebox.showwarning("Aviso", "Preencha os Campos.")
+			controler.show_frame(CadastrarParticipante)
 		elif(Base_Participante.nome_vazio()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Nome")
-		elif(Base_Participante.data_vazia()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Data")
+			messagebox.showwarning("Aviso", "Preencha o Campo Nome.")
+		elif(Base_Participante.nascimento_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Nascimento.")
+		elif(Base_Participante.cpf_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Cpf.")
+		elif(Base_Participante.academia_vazia()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Academia.")
+		elif(Base_Participante.graduacao_vazia()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Graduacao.")
+		elif(Base_Participante.telefone_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Telefone.")
+		elif(Base_Participante.endereco_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Endereco.")
 		elif(not Base_Participante.este_participante_existe()):
-			self.limpar_campos(controler)
-			messagebox.showinfo("Participante Cadastrado com Sucesso!")
-			controler.show_frame(MenuPrincipal)
+			if Base_Participante.data_nascimento_valida():
+				self.limpar_campos(controler)
+				messagebox.showinfo("Sucesso","Participante cadastrado com sucesso!")
+			else:
+				messagebox.showerror("Aviso", "Data Nascimento invalida!")
 		else:
 			self.limpar_campos(controler)
-			messagebox.showerror("Erro", "Nao foi Possivel Cadastrar.")
-			controler.show_frame(LoginInicial)
+			messagebox.showerror("Erro", "Participante ja cadastrado!")
 			
 	def limpar_campos(self,controler):
-		self.tipo1_s = False
-		self.tipo2_s = False
-		self.tipo3_s = False
 		self.tipo = "Professor"
+		self.sexo = "Masculino"
+		self.ativar_sexo_m()
+		self.ativar_tipo1()
 		self.entrada_nome.delete(0, END)
 		self.entrada_academia.delete(0, END)
 		self.entrada_cpf.delete(0, END)
@@ -379,9 +401,7 @@ class CadastrarParticipante(Frame):
 		self.entrada_graduacao.delete(0, END)
 		self.entrada_telefone.delete(0, END)
 		self.entrada_endereco.delete(0, END)
-		controler.show_frame(MenuPrincipal)
-	def valida_dados(self,controler):
-		pass
+		controler.show_frame(CadastrarParticipante)
 		
 #CLASSE RESPONSAVEL PELO CADASTRO DE SECRETARIO
 class CadastrarSecretario(Frame):
@@ -437,26 +457,23 @@ class CadastrarSecretario(Frame):
 		if(Base_Secretario.login_vazio() and Base_Secretario.senha_vazia() and rep_senha==""):
 			messagebox.showwarning("Aviso", "Preencha os Campos!")
 		elif(Base_Secretario.login_vazio()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Login!")
+			messagebox.showwarning("Aviso", "Preencha o Campo Login!")
 		elif(Base_Secretario.senha_vazia()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Senha!")
+			messagebox.showwarning("Aviso", "Preencha o Campo Senha!")
 		elif(rep_senha==""):
-			messagebox.showwarning("Aviso", "Preencha o Campo de rep_senha!")
+			messagebox.showwarning("Aviso", "Preencha o Campo Rep_senha!")
 		elif(not (Base_Secretario.get_senha() == rep_senha)):
 			messagebox.showwarning("Aviso", "Senhas diferem!")
-		elif(not Base_Secretario.este_secretario_existe()):
-			self.limpar_campos(controler)
-			if Base_Secretario.salvar_secretario():
-				messagebox.showinfo("Sucesso", "Usuario adcionado com sucesso")
-				Base_Secretario.inicializacao_padrao()
-				controler.show_frame(MenuSecretario)
-			else:
-				messagebox.showerror("Erro", "Nao foi possivel cadastrar")
-				controler.show_frame(CadastrarSecretario)
 		else:
+			if(not Base_Secretario.este_secretario_existe()):			
+				if Base_Secretario.salvar_secretario():
+					messagebox.showinfo("Sucesso", "Usuario adcionado com sucesso")
+					Base_Secretario.inicializacao_padrao()
+				else:
+					messagebox.showerror("Erro", "Nao foi possivel cadastrar")
+			else:
+				messagebox.showerror("Erro", "Secretario ja cadastrado!")
 			self.limpar_campos(controler)
-			messagebox.showerror("Erro", "Login ou Senha Invalidos")
-			controler.show_frame(CadastrarSecretario)
 
 #CLASSE RESPONSAVEL PELO CADASTRO DE TORNEIO
 class CadastrarTorneio(Frame):
@@ -494,21 +511,151 @@ class CadastrarTorneio(Frame):
 		
 		self.frame_botoes = Frame(self, bg = COR_FUNDO,pady=10)
 		self.frame_botoes.pack()
-		self.botao_salvar = Button(self.frame_botoes,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text = "Salvar",width = int(LARGURA_PADRAO/3),command = None,activebackground='green')
+		self.botao_salvar = Button(self.frame_botoes,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text = "Salvar",width = int(LARGURA_PADRAO/3),command = lambda:self.salvar_dados(),activebackground='green')
 		self.botao_salvar.grid(row=0,column=0)
 		self.botao_cancel = Button(self.frame_botoes,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text = "Cancelar",width = int(LARGURA_PADRAO/3),command = lambda:controler.show_frame(MenuTorneio),activebackground='green')
 		self.botao_cancel.grid(row=0,column=10)
-	def limpar_campos(self,controler):
+	def limpar_campos(self):
 		self.entrada_nome.delete(0,END)
 		self.entrada_local.delete(0,END)
 		self.entrada_data.delete(0,END)
 		self.entrada_valor.delete(0,END)
-		controler.show_frame(CadastrarTorneio)
-	def valida_dados(self,controler):
-		pass
+	def salvar_dados(self):
+		global Base_Torneio
+		Base_Torneio.set_nome(self.entrada_nome.get())
+		Base_Torneio.set_local(self.entrada_local.get())
+		Base_Torneio.set_data(self.entrada_data.get())
+		Base_Torneio.set_valor(self.entrada_valor.get())
+		if Base_Torneio.nome_vazio() and Base_Torneio.local_vazio() and Base_Torneio.data_vazia() and Base_Torneio.valor_vazio():
+			messagebox.showwarning("Aviso", "Preencha os campos.")
+		elif Base_Torneio.nome_vazio():
+			messagebox.showwarning("Aviso", "Preencha o campo Nome.")
+		elif Base_Torneio.local_vazio():
+			messagebox.showwarning("Aviso", "Preencha o campo Local.")
+		elif Base_Torneio.data_vazia():
+			messagebox.showwarning("Aviso", "Preencha o campo Data.")
+		elif Base_Torneio.valor_vazio():
+			messagebox.showwarning("Aviso", "Preencha o campo Valor.")
+		else:
+			if not Base_Torneio.este_torneio_existe():
+				messagebox.showinfo("Salvando...", "Torneio cadastrado com sucesso.")
+				self.limpar_campos()
+			else:
+				messagebox.showerror("Erro", "Este Torneio ja esta cadastrado!")
+				self.limpar_campos()
 
+#CLASSE RESPONSAVEL PELA TELA DE REMOCAO DE ACADEMIA
+class RemoverAcademia(Frame):
+	def __init__(self,parent,controler):
+		Frame.__init__(self,parent)
+		self['bg'] = COR_FUNDO
+		self.frame_titulo = Frame(self, bg = COR_FUNDO,pady=80)
+		self.frame_titulo.pack()
+		self.titulo = Label(self.frame_titulo,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text= "Remover Academia",width=60,height=4)
+		self.titulo.grid(row=0,column=1)
+		
+		self.frame_academia = Frame(self, bg = COR_FUNDO,pady=20)
+		self.frame_academia.pack()
+		
+		self.academia = Label(self.frame_academia,border=2,relief=TIPO_BORDA_BOTAO,text="Nome : ",width=int(LARGURA_PADRAO/3),font=FONTE_PADRAO)
+		self.id = Label(self.frame_academia,border=2,relief=TIPO_BORDA_BOTAO,text="ID : ",width=int(LARGURA_PADRAO/3),font=FONTE_PADRAO)
+		
+		self.entrada_academia = Entry(self.frame_academia,width=80)
+		self.entrada_id = Entry(self.frame_academia,width=80,show="*")
+		
+		self.academia.grid(row=0,column=0)
+		self.id.grid(row=1,column=0)
+		
+		self.entrada_academia.grid(row=0,column=1)
+		self.entrada_id.grid(row=1,column=1)
+		
+		self.frame_botoes = Frame(self, bg = COR_FUNDO,pady=10)
+		self.frame_botoes.pack()
+		self.botao_salvar = Button(self.frame_botoes,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Remover",width = int(LARGURA_PADRAO/3),command = lambda:self.remover_academia(controler),activebackground='green')
+		self.botao_salvar.grid(row=0,column=0)
+		self.botao_cancel = Button(self.frame_botoes,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Cancelar",width = int(LARGURA_PADRAO/3),command = lambda:self.voltar(controler),activebackground='green')
+		self.botao_cancel.grid(row=0,column=10)
+	def remover_academia(self, controler):
+		global Base_Academia
+		Base_Academia.set_nome(self.entrada_academia.get())
+		Base_Academia.set_id(self.entrada_id.get())
+		if Base_Academia.nome_vazio() and Base_Academia.id_vazio():
+			messagebox.showwarning("Aviso", "Preencha os campos!")
+		elif(Base_Academia.nome_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o campo Academia!")
+		elif(Base_Academia.id_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o campo ID!")
+		elif(Base_Academia.esta_academia_existe()):
+			Base_Academia.remover_academia()
+			self.limpar_campos()
+			messagebox.showinfo("Sucesso", "Academia removido com sucesso")
+		else:
+			self.limpar_campos()
+			messagebox.showerror("Erro", "Academia nao encontrada!")
+		controler.show_frame(RemoverAcademia)
+	def limpar_campos(self):
+		self.entrada_academia.delete(0,END)
+		self.entrada_id.delete(0,END)
+	def voltar(self,controler):
+		Base_Academia.inicializacao_padrao()
+		controler.show_frame(MenuAcademia)
 #CLASSE RESPONSAVEL PELA TELA DE REMOCAO DE SECRETARIO
 class RemoverSecretario(Frame):
+	def __init__(self,parent,controler):
+		Frame.__init__(self,parent)
+		self['bg'] = COR_FUNDO
+		self.frame_titulo = Frame(self, bg = COR_FUNDO,pady=80)
+		self.frame_titulo.pack()
+		self.titulo = Label(self.frame_titulo,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text= "Remover Secretario",width=60,height=4)
+		self.titulo.grid(row=0,column=1)
+		
+		self.frame_participante = Frame(self, bg = COR_FUNDO,pady=20)
+		self.frame_participante.pack()
+		
+		self.login = Label(self.frame_participante,border=2,relief=TIPO_BORDA_BOTAO,text="login : ",width=int(LARGURA_PADRAO/3),font=FONTE_PADRAO)
+		self.senha = Label(self.frame_participante,border=2,relief=TIPO_BORDA_BOTAO,text="senha : ",width=int(LARGURA_PADRAO/3),font=FONTE_PADRAO)
+		
+		self.entrada_login = Entry(self.frame_participante,width=80)
+		self.entrada_senha = Entry(self.frame_participante,width=80,show="*")
+		
+		self.login.grid(row=0,column=0)
+		self.senha.grid(row=1,column=0)
+		
+		self.entrada_login.grid(row=0,column=1)
+		self.entrada_senha.grid(row=1,column=1)
+		
+		self.frame_botoes = Frame(self, bg = COR_FUNDO,pady=10)
+		self.frame_botoes.pack()
+		self.botao_salvar = Button(self.frame_botoes,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Remover",width = int(LARGURA_PADRAO/3),command = lambda:self.remover_secretario(controler),activebackground='green')
+		self.botao_salvar.grid(row=0,column=0)
+		self.botao_cancel = Button(self.frame_botoes,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO, text = "Cancelar",width = int(LARGURA_PADRAO/3),command = lambda:self.voltar(controler),activebackground='green')
+		self.botao_cancel.grid(row=0,column=10)
+	def remover_secretario(self, controler):
+		global Base_Secretario
+		Base_Secretario.set_login(self.entrada_login.get())
+		Base_Secretario.set_senha(self.entrada_senha.get())
+		if Base_Secretario.login_vazio() and Base_Secretario.senha_vazia():
+			messagebox.showwarning("Aviso", "Preencha os Campos!")
+		elif(Base_Secretario.login_vazio()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Login!")
+		elif(Base_Secretario.senha_vazia()):
+			messagebox.showwarning("Aviso", "Preencha o Campo Senha!")
+		elif(Base_Secretario.este_secretario_existe()):
+			Base_Secretario.remover_secretario()
+			self.limpar_campos()
+			messagebox.showinfo("Sucesso", "Secretario removido com sucesso")
+			Base_Secretario.inicializacao_padrao()
+		else:
+			messagebox.showerror("Erro", "Secretario nao encontrado!")
+		controler.show_frame(RemoverSecretario)
+	def limpar_campos(self):
+		self.entrada_login.delete(0,END)
+		self.entrada_senha.delete(0,END)
+	def voltar(self,controler):
+		Base_Secretario.inicializacao_padrao()
+		controler.show_frame(MenuSecretario)
+#CLASSE RESPONSAVEL PELA TELA DE REMOCAO DE PARTICIPANTE
+class RemoverParticipante(Frame):
 	def __init__(self,parent,controler):
 		Frame.__init__(self,parent)
 		self['bg'] = COR_FUNDO
@@ -543,23 +690,22 @@ class RemoverSecretario(Frame):
 		Base_Secretario.set_login(self.entrada_login.get())
 		Base_Secretario.set_senha(self.entrada_senha.get())
 		if Base_Secretario.login_vazio() and Base_Secretario.senha_vazia():
-			messagebox.showwarning("Aviso", "Preencha os Campos!")
+			messagebox.showwarning("Aviso", "Preencha os campos!")
 		elif(Base_Secretario.login_vazio()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Login!")
+			messagebox.showwarning("Aviso", "Preencha o campo Login!")
 		elif(Base_Secretario.senha_vazia()):
-			messagebox.showwarning("Aviso", "Preencha o Campo de Senha!")
+			messagebox.showwarning("Aviso", "Preencha o campo Senha!")
 		elif(Base_Secretario.este_secretario_existe()):
 			Base_Secretario.remover_secretario()
 			self.limpar_campos()
 			messagebox.showinfo("Sucesso", "Secretario removido com sucesso")
 			Base_Secretario.inicializacao_padrao()
 		else:
-			messagebox.showerror("Erro", "Secretario nao encontrado")
+			messagebox.showerror("Erro", "Secretario nao encontrado!")
 		controler.show_frame(RemoverSecretario)
 	def limpar_campos(self):
 		self.entrada_login.delete(0,END)
 		self.entrada_senha.delete(0,END)
-		
 #CLASSE RESPONSAVEL PELA TELA DE LISIAGEM DE ACADEMIA
 class ListarAcademia(Frame):
 	def __init__(self,parent,controler):
@@ -687,13 +833,31 @@ class GerarCarteirinha(Frame):
 		Base_Participante.set_nome(self.entrada_nome.get())
 		Base_Participante.set_academia(self.entrada_academia.get())
 		Base_Participante.set_cpf(self.entrada_cpf.get())
-		Base_Participante = Base_Participante.get_participante()
-		if Base_Participante == None:
-			Base_Participante = Controller_Participante()
+		if Base_Participante.nome_vazio() and Base_Participante.academia_vazia() and Base_Participante.cpf_vazio():
+			messagebox.showwarning("Aviso", "Preencha os campos.")
+			controler.show_frame(GerarCarteirinha)
+		elif Base_Participante.nome_vazio():
+			messagebox.showwarning("Aviso", "Preencha o campo Nome.")
+			controler.show_frame(GerarCarteirinha)
+		elif Base_Participante.academia_vazia():
+			messagebox.showwarning("Aviso", "Preencha o campo Academia.")
+			controler.show_frame(GerarCarteirinha)
+		elif Base_Participante.cpf_vazio():
+			messagebox.showwarning("Aviso", "Preencha o campo Cpf.")
 			controler.show_frame(GerarCarteirinha)
 		else:
-			controler.show_frame(ExibeCarteirinha)
-			
+			if Base_Participante.este_participante_existe():
+				messagebox.showinfo("Gerando", "Participante encontrado.")
+				self.limpar_campos()
+				controler.show_frame(ExibeCarteirinha)
+			else:
+				messagebox.showerror("Erro", "Participante nao encontrado.")
+				self.limpar_campos()
+				controler.show_frame(GerarCarteirinha)
+	def limpar_campos(self):
+		self.entrada_nome.delete(0,END)
+		self.entrada_academia.delete(0,END)
+		self.entrada_cpf.delete(0,END)
 #CLASSE RESPONSAVEL PELA TELA EXIBICAO DE CARTEIRINHA
 class ExibeCarteirinha(Frame):
 	def __init__(self,parent,controler):
@@ -740,8 +904,8 @@ class Sobre(Frame):
 		self.titulo.grid(row=0,column=1)
 		self.frame_texto = Frame(self, bg = COR_FUNDO,pady=10,padx=10,height=4,width=10)
 		self.frame_texto.pack()
-		texto = "O sistema judorama foi desenvolvido para gerenciar a Federacao de judo\n"
-		texto += "Uma Confederação qualquer de Judô pode usar nossa Plataforma para facilitar sua organizacao.\n"
+		texto = "O Sistema judorama foi desenvolvido para gerenciar a Federacao de judo\n"
+		texto += "Uma Confederação qualquer de Judô pode usar nossa plataforma para facilitar sua organizacao.\n"
 		texto += "O sistema disponibliza as seguintes funcionalidades:\n"
 		texto += "\t1 - Gerenciamento de atletas(Participantes).\n"
 		texto += "\t2 - Gerenciamento de instituicoes de artes marciais(Academias).\n"
@@ -750,11 +914,15 @@ class Sobre(Frame):
 		texto += "\t5 - Gerenciamento de pagamentos(Boletos).\n"
 		texto += "\t6 - Gerenciamento de dados exclusivos de cada atleta(Carteirinhas).\n"
 		texto += "Projeto concebido na Discplina de Engenharia de Software II na instuicao de ensino CSHN-UFPI.\n"
-		texto += "Curso de Sistemas de Informacao - 4 periodo.\n"
+		texto += "Curso de sistemas de informacao - 4 periodo.\n"
 		texto += "Esse projeto foi implemetado em linguaguem Python 3.2.\n"
 		texto += "Iniciou no comeco de Abril de 2018.\n"
+		texto += "Versao: 01.15.06.2018-pt-br\n"
+		texto += "Desenvolvedores:\n"
+		texto += "\tFrancisco Charles\n"
+		texto += "\tJose Mayke\n"
 		mensagem = Label(self.frame_texto,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text=texto,font=('Time News Roman','18','bold'))
-		mensagem.pack()
+		mensagem.pack(side=LEFT)
 		botao = Button(self,border=TAMANHO_BORDA_BOTAO,relief=TIPO_BORDA_BOTAO,text="voltar",width= 10, command= lambda: controler.show_frame(MenuPrincipal))
 		botao.pack()
 		
