@@ -23,17 +23,17 @@ class Controller_Secretario(Model_Banco_Secretario):
 			return False
 		return True
 	def login_vazio(self):
-		if (self.get_login() is None) or (len(self.get_login())==0):
+		if (self.get_login() == None) or (len(self.get_login())==0):
 			return True
 		return False
 	def senha_vazia(self):
-		if (self.get_senha() is None) or (len(self.get_senha())==0):
+		if (self.get_senha() == None) or (len(self.get_senha())==0):
 			return True
 		return False
 	def login_tem_caractere_especial(self):
 		if self.login_vazio():
 			return False
-		especiais = " .,<>;:?/\\!'\"¹²³£¢¬#$%%¨&´`§*()ç_~^+-=[]{}ªº°|@"
+		especiais = ".,<>;:?/\\!'\"¹²³£¢¬#$%%¨&´`§*()ç~^+-=[]{}ªº°|@"
 		login = self.get_login()
 		for caractere in especiais:
 			if login.count(caractere) > 0:

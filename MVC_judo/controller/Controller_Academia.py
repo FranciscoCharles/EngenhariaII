@@ -62,27 +62,31 @@ class Controller_Academia(Model_Banco_Academia):
 				return True
 		return False
 	def nome_vazio(self):
-		if (self.get_nome() is None) or (len(self.get_nome()) == 0):
+		if (self.get_nome() == None) or (len(self.get_nome()) == 0):
 			return True
 		return False
 	def data_vazia(self):
-		if (self.get_data() is None) or (len(self.get_data()) == 0):
+		if (self.get_data() == None) or (len(self.get_data()) == 0):
 			return True
 		return False
 	def contato_vazio(self):
-		if (self.get_contato() is None) or (len(self.get_contato()) == 0) :
+		if (self.get_contato() == None) or (len(self.get_contato()) == 0) :
 			return True
 		return False
 	def email_vazio(self):
-		if (self.get_email() is None) or (len(self.get_email()) == 0):
+		if (self.get_email() == None) or (len(self.get_email()) == 0):
 			return True
 		return False
 	def responsavel_vazio(self):
-		if (self.get_responsavel() is None) or (len(self.get_responsavel()) == 0):
+		if (self.get_responsavel() == None) or (len(self.get_responsavel()) == 0):
 			return True
 		return False
 	def local_vazio(self):
-		if (self.get_local() is None) or (len(self.get_local()) == 0):
+		if (self.get_local() == None) or (len(self.get_local()) == 0):
+			return True
+		return False
+	def id_vazio(self):
+		if (self.get_id() == None) or (len(self.get_id()) == 0):
 			return True
 		return False
 	def contato_valido(self):
