@@ -89,6 +89,14 @@ class Controller_Academia(Model_Banco_Academia):
 		if (self.get_id() == None) or (len(self.get_id()) == 0):
 			return True
 		return False
+	def id_valido(self):
+		try:
+			if (self.get_id() == None):
+				return False
+			int(self.get_id())
+		except ValueError:
+			return False
+		return True
 	def contato_valido(self):
 		if (self.contato_vazio()) or (len(self.get_contato()) < 9 ) or (len(self.get_contato()) > 12 ):
 			return False

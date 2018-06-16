@@ -97,31 +97,35 @@ class Controller_Torneio(Model_Banco_Torneio):
 				return True
 		return False
 	def nome_vazio(self):
-		if (self.get_nome() is None) or (len(self.get_nome()) == 0):
+		if (self.get_nome() == None) or (len(self.get_nome()) == 0):
 			return True
 		return False
 	def horario_vazio(self):
-		if (self.get_horario() is None) or (len(self.get_horario()) == 0):
+		if (self.get_horario() == None) or (len(self.get_horario()) == 0):
 			return True
 		return False
 	def data_vazia(self):
-		if (self.get_data() is None) or (len(self.get_data()) == 0):
+		if (self.get_data() == None) or (len(self.get_data()) == 0):
 			return True
 		return False
 	def contato_vazio(self):
-		if (self.get_contato() is None) or (len(self.get_contato()) == 0) :
+		if (self.get_contato() == None) or (len(self.get_contato()) == 0) :
 			return True
 		return False
 	def valor_vazio(self):
-		if (self.get_valor() is None) or (len(self.get_valor()) == 0):
+		if (self.get_valor() == None) or (len(self.get_valor()) == 0):
 			return True
 		return False
 	def organizador_vazio(self):
-		if (self.get_organizador() is None) or (len(self.get_organizador()) == 0):
+		if (self.get_organizador() == None) or (len(self.get_organizador()) == 0):
 			return True
 		return False
 	def local_vazio(self):
-		if (self.get_local() is None) or (len(self.get_local()) == 0):
+		if (self.get_local() == None) or (len(self.get_local()) == 0):
+			return True
+		return False
+	def id_vazio(self):
+		if (self.get_id() == None) or (len(self.get_id()) == 0):
 			return True
 		return False
 	def contato_valido(self):
