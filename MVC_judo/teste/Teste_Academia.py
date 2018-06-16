@@ -44,6 +44,16 @@ class Teste_Academia(unittest.TestCase):
 	def teste_local_nao_vazio(self):
 		self.academia.set_local("rua dos bobos numero 0")
 		self.assertFalse(self.academia.local_vazio())
+	def teste_id_vazio(self):
+		self.assertTrue(self.academia.id_vazio())
+	def teste_id_nao_vazio(self):
+		self.academia.set_id("1")
+		self.assertFalse(self.academia.id_vazio())
+	def teste_id_invalido(self):
+		self.assertFalse(self.academia.id_valido())
+	def teste_id_valido(self):
+		self.academia.set_id("1")
+		self.assertTrue(self.academia.id_valido())
 	#teste em relacao a validacao de dados
 	def teste_dados_validos(self):
 		self.academia.set_data("20/02/18")
