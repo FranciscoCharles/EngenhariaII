@@ -76,6 +76,11 @@ class Controller_Participante(Model_Banco_Participante):
 		if (self.get_graduacao() == None) or (len(self.get_graduacao()) == 0):
 			return True
 		return False
+	def graduacao_valida(self):
+		valido = ["Branca","Cinza","Amarela","Laranja","Verde","Roxa","Marrom","Preta","Vermelha"]
+		if valido.count(self.get_graduacao())==0:
+			return True
+		return False
 	def tipo_vazio(self):
 		if (self.get_tipo() == None) or (len(self.get_tipo()) == 0):
 			return True

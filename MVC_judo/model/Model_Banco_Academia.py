@@ -33,7 +33,6 @@ class Model_Banco_Academia(Model_Academia):
 					contato VARCHAR(12) NOT NULL,
 					email VARCHAR(30) NOT NULL,
 					responsavel VARCHAR(30) NOT NULL,
-					PRIMARY KEY(nome),
 					FOREIGN KEY (nome) REFERENCES participante(academia)
 				);
 			""")
@@ -62,13 +61,14 @@ class Model_Banco_Academia(Model_Academia):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM academia;")
 			texto = self.cursor.fetchall()
-			saida = ""
+			saida = []
 			for linha in texto:
-				saida += str(linha[1])+"\n"
+				saida.append(linha)
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :
 			pass
+		return []
 	def remover_academia(self):	
 		try:
 			if self.esta_academia_existe():
@@ -110,7 +110,7 @@ class Model_Banco_Academia(Model_Academia):
 			saida = self.cursor.execute("SELECT * FROM academia WHERE (nome=?)",(self.get_nome(),))
 			saida = saida.fetchone()
 			self.conecao.close();
-			if saida is not None:
+			if saida != None:
 				return True
 		except sqlite3.Error :
 			pass

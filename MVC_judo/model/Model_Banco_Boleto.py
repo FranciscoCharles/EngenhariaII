@@ -71,10 +71,9 @@ class Model_Banco_Boleto(Model_Boleto):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM boleto ORDER BY inscricao;")
 			texto = self.cursor.fetchall()
-			saida = ""
-			lista = self.set_boleto(texto)
+			saida = []
 			for linha in texto:
-				saida += str(linha[0])+"\n"
+				saida.append(linha)
 			self.conecao.close()
 			return lista
 		except sqlite3.Error :

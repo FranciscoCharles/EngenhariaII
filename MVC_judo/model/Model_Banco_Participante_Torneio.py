@@ -66,9 +66,9 @@ class Model_Banco_Participante_Torneio(Model_Participante_Torneio):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM participante_torneio;")
 			texto = self.cursor.fetchall()
-			saida = ""
+			saida = []
 			for linha in texto:
-				saida += str(linha[1])+"\n"
+				saida.append(linha)
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :

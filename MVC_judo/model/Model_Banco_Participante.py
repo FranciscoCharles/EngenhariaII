@@ -27,7 +27,7 @@ class Model_Banco_Participante(Model_Participante):
 			self.cursor = self.conecao.cursor()
 			resultado = self.cursor.execute("""
 				CREATE TABLE IF NOT EXISTS participante (
-					inscricao INTEGER AUTOINCREMENT,
+					inscricao INTEGER PRIMARY KEY AUTOINCREMENT,
 					nome VARCHAR(100) NOT NULL,
 					academia VARCHAR(120) NOT NULL,
 					nascimento VARCHAR(10) NOT NULL,
@@ -36,8 +36,7 @@ class Model_Banco_Participante(Model_Participante):
 					tipo VARCHAR(20) NOT NULL,
 					sexo VARCHAR(10) NOT NULL,
 					graduacao VARCHAR(20) NOT NULL,
-					telefone VARCHAR(12) NOT NULL,
-					PRIMARY KEY (inscricao)
+					telefone VARCHAR(12) NOT NULL
 				);
 			""")
 			self.conecao.close()
@@ -46,8 +45,6 @@ class Model_Banco_Participante(Model_Participante):
 		except sqlite3.Error :
 			pass
 		return False
-	def conta_participantes(self):
-		pass
 	def salvar_participante(self):
 		try:
 			if not self.este_participante_existe():
@@ -67,13 +64,14 @@ class Model_Banco_Participante(Model_Participante):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM participante;")
 			texto = self.cursor.fetchall()
-			saida = ""
+			saida = []
 			for linha in texto:
-				saida += str(linha)+"\n"
+				saida.append(linha)
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :
 			pass
+		return []
 	def remover_participante(self):	
 		try:
 			if self.este_participante_existe():
@@ -84,6 +82,20 @@ class Model_Banco_Participante(Model_Participante):
 				self.conecao.commit()
 				self.conecao.close()
 				if saida is not None:
+					return True
+		except sqlite3.Error :
+			pass
+		return False
+	def remover_participante_id(self):	
+		try:
+			if self.este_participante_existe():
+				self.conecao = sqlite3.connect(self.get_caminho())
+				self.cursor = self.conecao.cursor()
+				# excluindo um registro da tabela
+				saida = self.cursor.execute("DELETE FROM participante WHERE (inscricao=?)", (self.get_inscricao(),))
+				self.conecao.commit()
+				self.conecao.close()
+				if saida != None:
 					return True
 		except sqlite3.Error :
 			pass
@@ -156,7 +168,7 @@ class Model_Banco_Participante(Model_Participante):
 		
 if __name__== '__main__':
 	P = Model_Banco_Participante()
-	print(P.criar_tabela())
+	print("criou "+str(P.criar_tabela()))
 	P.set_nome("Boi")
 	P.set_academia("Cobra")
 	P.set_nascimento("13/10/2019")

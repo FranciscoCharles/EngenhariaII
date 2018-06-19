@@ -98,7 +98,7 @@ class Controller_Academia(Model_Banco_Academia):
 			return False
 		return True
 	def contato_valido(self):
-		if (self.contato_vazio()) or (len(self.get_contato()) < 9 ) or (len(self.get_contato()) > 12 ):
+		if (self.contato_vazio()) or (len(self.get_contato()) < 8 ) or (len(self.get_contato()) > 12 ):
 			return False
 		return True
 	def dados_validos(self):

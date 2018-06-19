@@ -56,9 +56,9 @@ class Model_Banco_Secretario(Model_Secretario):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM secretario ORDER BY login")
 			texto = self.cursor.fetchall()
-			saida = ""
+			saida = []
 			for linha in texto:
-				saida += str(linha[0])+"\n"
+				saida.append(linha)
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :

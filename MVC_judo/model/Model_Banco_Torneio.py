@@ -63,7 +63,7 @@ class Model_Banco_Torneio(Model_Torneio):
 				resultado = self.cursor.execute("INSERT INTO torneio (nome,data,local,horario,contato,organizador) VALUES (?,?,?,?,?,?)",(self.get_nome(),self.get_data(),self.get_local(),self.get_horario(),self.get_contato(),self.get_organizador(),))
 				self.conecao.commit()
 				self.conecao.close()
-				if resultado is not None:
+				if resultado != None:
 					return True
 		except sqlite3.Error :
 			pass
@@ -74,13 +74,14 @@ class Model_Banco_Torneio(Model_Torneio):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM torneio;")
 			texto = self.cursor.fetchall()
-			saida = ""
+			saida = []
 			for linha in texto:
-				saida += str(linha[1])+"\n"
+				saida.append(linha)
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :
 			pass
+		return []
 	def remover_torneio_nome(self):	
 		try:
 			if self.este_secretario_existe():
@@ -102,6 +103,20 @@ class Model_Banco_Torneio(Model_Torneio):
 				self.cursor = self.conecao.cursor()
 				# excluindo um registro da tabela
 				saida = self.cursor.execute("DELETE FROM torneio WHERE (id=?)", (self.get_id(),))
+				self.conecao.commit()
+				self.conecao.close()
+				if saida is not None:
+					return True
+		except sqlite3.Error :
+			pass
+		return False
+	def remover_torneio_id_nome(self):	
+		try:
+			if self.este_secretario_existe():
+				self.conecao = sqlite3.connect(self.get_caminho())
+				self.cursor = self.conecao.cursor()
+				# excluindo um registro da tabela
+				saida = self.cursor.execute("DELETE FROM torneio WHERE (id=?) AND (nome=?)", (self.get_id(),self.get_nome(),))
 				self.conecao.commit()
 				self.conecao.close()
 				if saida is not None:
@@ -143,3 +158,5 @@ class Model_Banco_Torneio(Model_Torneio):
 		return False
 if __name__== '__main__':
 	A = Model_Banco_Torneio()
+	A.set_id("1")
+	print(A.buscar_torneio_id())

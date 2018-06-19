@@ -61,9 +61,9 @@ class Model_Banco_Carteirinha(Model_Carteirinha):
 			self.cursor = self.conecao.cursor()
 			self.cursor.execute("SELECT * FROM boleto BY ORDER inscricao")
 			texto = self.cursor.fetchall()
-			saida = ""
+			saida = []
 			for linha in texto:
-				saida += str(linha[1])+"\n"
+				saida.append(linha)
 			self.conecao.close()
 			return saida
 		except sqlite3.Error :
