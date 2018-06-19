@@ -15,10 +15,11 @@ colaborador:
 linguaguem :
 	python 3.6
 status do processo:
-	em desenvolvimento...87%
+	em desenvolvimento...94%
 versao atual :
-	01-16.06.2018-pt-br
+	01-19.06.2018-pt-br
 versoes anteriores:
+	01-16.06.2018-pt-br
 	02-15.06.2018-pt-br
 	01-15.06.2018-pt-br
 	01-30.05.2018-pt-br
